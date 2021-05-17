@@ -1,11 +1,13 @@
 var positions = [[36.35032826061445, 138.99267196655273]];
 var nextPositionNum = 0;
 const threshold = 1;
+var id;
 var options = {
     enableHighAccuracy: true,
     timeout: 8000,
     maximumAge: 2000,
 };
+var start = false;
 
 var map = L.map('map', {
     center: [35.66572, 139.73100],
@@ -44,13 +46,21 @@ function success(pos) {
     var currentPos = [lat, lng];
     map.setView([lat, lng], 17);
     L.marker([lat, lng]).addTo(map);
+
+    if (!start) {
+        return;
+    }
+    
     if (positions.length > 0) {
         var distToNextPosition = getDistance(currentPos, positions[nextPositionNum])
         if (distToNextPosition < threshold) {
             console.log("reach");
             if (nextPositionNum < positions.length-1) {
                 nextPositionNum ++;
-            }  
+            } else {
+                navigator.geolocation.clearWatch(id);
+                alert("finish");
+            }
         }
     }
 }
@@ -61,13 +71,16 @@ function error(err) {
 
 
 if (navigator.geolocation) {
-    // var id = navigator.geolocation.watchPosition(success, error, options);
+    // id = navigator.geolocation.watchPosition(success, error, options);
 } else {
     // 対応していない場合
     var errorMessage = "error";
     alert( errorMessage );
 }
 
-$('.button').on('click', function() {
+$('.locate-button').on('click', function() {
     navigator.geolocation.getCurrentPosition(success, error, options);
+})
+$('.start-button').on('click', function() {
+    start = true;
 })
