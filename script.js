@@ -1,4 +1,11 @@
-var positions = [];
+var positions = [[36.35032826061445, 138.99267196655273]];
+var nextPositionNum = 0;
+const threshold = 1;
+var options = {
+    enableHighAccuracy: true,
+    timeout: 8000,
+    maximumAge: 2000,
+};
 
 var map = L.map('map', {
     center: [35.66572, 139.73100],
@@ -30,31 +37,37 @@ function getDistance(pos1, pos2) {
     return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
 }
 
-
-
-var id, target, options;
-
 function success(pos) {
-  var crd = pos.coords;
-  if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
-    console.log('Congratulations, you reached the target');
-    navigator.geolocation.clearWatch(id);
-  }
+    console.log("get");
+    var lat = pos.coords.latitude;
+    var lng = pos.coords.longitude;
+    var currentPos = [lat, lng];
+    map.setView([lat, lng], 17);
+    L.marker([lat, lng]).addTo(map);
+    if (positions.length > 0) {
+        var distToNextPosition = getDistance(currentPos, positions[nextPositionNum])
+        if (distToNextPosition < threshold) {
+            console.log("reach");
+            if (nextPositionNum < positions.length-1) {
+                nextPositionNum ++;
+            }  
+        }
+    }
 }
 
 function error(err) {
   console.warn('ERROR(' + err.code + '): ' + err.message);
 }
 
-target = {
-  latitude : 0,
-  longitude: 0
-};
 
-options = {
-  enableHighAccuracy: false,
-  timeout: 5000,
-  maximumAge: 0
-};
+if (navigator.geolocation) {
+    // var id = navigator.geolocation.watchPosition(success, error, options);
+} else {
+    // 対応していない場合
+    var errorMessage = "error";
+    alert( errorMessage );
+}
 
-id = navigator.geolocation.watchPosition(success, error, options);
+$('.button').on('click', function() {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+})
