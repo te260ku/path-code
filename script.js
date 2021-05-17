@@ -1,4 +1,4 @@
-var positions = [[36.35032826061445, 138.99267196655273]];
+var positions = [];
 var nextPositionNum = 0;
 const threshold = 1;
 var id;
@@ -45,16 +45,18 @@ function success(pos) {
     var lng = pos.coords.longitude;
     var currentPos = [lat, lng];
     map.setView([lat, lng], 17);
-    L.marker([lat, lng]).addTo(map);
+    L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
 
     if (!start) {
         return;
     }
     
     if (positions.length > 0) {
-        var distToNextPosition = getDistance(currentPos, positions[nextPositionNum])
+        var target = positions[nextPositionNum];
+        var distToNextPosition = getDistance(currentPos, target)
         if (distToNextPosition < threshold) {
             console.log("reach");
+            L.marker([target[0], target[1]], {icon: L.spriteIcon('red')}).addTo(map);
             if (nextPositionNum < positions.length-1) {
                 nextPositionNum ++;
             } else {
@@ -71,7 +73,7 @@ function error(err) {
 
 
 if (navigator.geolocation) {
-    // id = navigator.geolocation.watchPosition(success, error, options);
+    id = navigator.geolocation.watchPosition(success, error, options);
 } else {
     // 対応していない場合
     var errorMessage = "error";
