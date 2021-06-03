@@ -22,16 +22,6 @@
         <a-camera gps-camera rotation-reader> </a-camera>
       </a-scene>
 
-      <template id="t">
-        <a-entity
-          look-at="[gps-camera]"
-          scale="2 2 2"
-          rotation="0 180 0" 
-          gps-entity-place="latitude: 36.34901209450942; longitude: 138.99239407459294;"
-          gltf-model="#mail"
-        ></a-entity>
-      </template>
-
       <script>
         var modelInfo = [
           {
@@ -40,17 +30,19 @@
             rotation: '0 180 0'
           }
         ];
+
+        createModel();
         
-        function createModel() {
-          var scene = document.querySelector('a-scene');
-          var model = document.createElement('a-entity');
-          model.setAttribute('scale', modelInfo.scale);
-          model.setAttribute('rotation', modelInfo.rotation);
-          model.setAttribute('gltf-model', modelInfo.url);
-          model.setAttribute('look-at', "[gps-camera]");
-          model.setAttribute('gps-entity-place', `latitude: ${30}; longitude: ${20}; `);
-          scene.appendChild(model);
-        }
+        function createModel(lat, lng) {
+          var scene = $('a-scene');
+          var model = $('<a-entity></a-entity');
+          model.attr('scale', modelInfo.scale);
+          model.attr('rotation', modelInfo.rotation);
+          model.attr('gltf-model', modelInfo.url);
+          model.attr('look-at', "[gps-camera]");
+          model.attr('gps-entity-place', `latitude: ${lat}; longitude: ${lng}; `);
+          scene.append(model);
+      }
         
       </script>
     </body>
