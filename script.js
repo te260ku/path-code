@@ -8,6 +8,9 @@ var options = {
     maximumAge: 2000,
 };
 var start = false;
+var mapArea = $('#map-area');
+var cameraArea = $('#camera-area');
+cameraArea.hide();
 
 var map = L.map('map', {
     center: [35.66572, 139.73100],
@@ -45,7 +48,7 @@ function success(pos) {
     var lng = pos.coords.longitude;
     var currentPos = [lat, lng];
     map.setView([lat, lng], 17);
-    L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
+    // L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
 
     if (!start) {
         return;
@@ -85,4 +88,12 @@ $('.locate-button').on('click', function() {
 })
 $('.start-button').on('click', function() {
     start = true;
+})
+$('.map-button').on('click', function() {
+    cameraArea.hide();
+    mapArea.show();
+})
+$('.camera-button').on('click', function() {
+    mapArea.hide();
+    cameraArea.show();
 })
