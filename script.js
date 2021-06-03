@@ -7,6 +7,11 @@ var options = {
     timeout: 8000,
     maximumAge: 2000,
 };
+var modelInfo = {
+        url: './assets/scene.gltf',
+        scale: '2 2 2',
+        rotation: '0 180 0'
+    };
 var start = false;
 var mapArea = $('#map-area');
 var cameraArea = $('#camera-area');
@@ -64,10 +69,25 @@ function success(pos) {
                 nextPositionNum ++;
             } else {
                 navigator.geolocation.clearWatch(id);
+                // 3Dモデルを作成する
+                createModel(target[0], target[1]);
+               
+
                 alert("finish");
             }
         }
     }
+}
+
+function createModel(lat, lng) {
+    var scene = $('a-scene');
+    var model = $('<a-entity></a-entity');
+    model.attr('scale', modelInfo.scale);
+    model.attr('rotation', modelInfo.rotation);
+    model.attr('gltf-model', modelInfo.url);
+    model.attr('look-at', "[gps-camera]");
+    model.attr('gps-entity-place', `latitude: ${lat}; longitude: ${lng}; `);
+    scene.append(model);
 }
 
 function error(err) {
@@ -96,4 +116,6 @@ $('.map-button').on('click', function() {
 $('.camera-button').on('click', function() {
     mapArea.hide();
     cameraArea.show();
+
+    createModel(36.34901209450942, 138.99239407459294);
 })
