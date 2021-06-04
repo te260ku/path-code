@@ -58,7 +58,7 @@ function success(pos) {
     var lng = pos.coords.longitude;
     var currentPos = [lat, lng];
 
-    // L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
+    L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
 
     if (!start) {
         return;
