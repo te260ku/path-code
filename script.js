@@ -1,6 +1,6 @@
 var positions = [];
 var nextPositionNum = 0;
-var threshold = 0.2;
+var threshold = 1;
 var id;
 var options = {
     enableHighAccuracy: true,
@@ -15,6 +15,7 @@ var modelInfo = {
 var start = false;
 var mapArea = $('#map-area');
 var currentMarker;
+var currentPosition = [36.34901209450942, 138.99239407459294]
 
 var map = L.map('map', {
     center: [35.66572, 139.73100],
@@ -56,6 +57,7 @@ function success(pos) {
     var lat = pos.coords.latitude;
     var lng = pos.coords.longitude;
     var currentPos = [lat, lng];
+
     // L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
 
     if (!start) {
@@ -85,8 +87,8 @@ function setCurrentPosition(pos) {
     console.log("get");
     var lat = pos.coords.latitude;
     var lng = pos.coords.longitude;
-    map.setView([lat, lng], 17);
-    L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
+    currentPosition = [lat, lng]
+    
 }
 
 function createModel(lat, lng) {
@@ -116,10 +118,14 @@ if (navigator.geolocation) {
 
 $('.locate-button').on('click', function() {
     navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
-    
+    map.setView([currentPosition[0], currentPosition[1]], 17);
+    L.marker([currentPosition[0], currentPosition[1]], {icon: L.spriteIcon('green')}).addTo(map);
 })
 $('.start-button').on('click', function() {
-    threshold = $('.threshold-form').val();
+    if ($('.threshold-form').val() == '') {
+        threshold = $('.threshold-form').val();
+    }
+    
     start = true;
 })
 $('.map-button').on('click', function() {
