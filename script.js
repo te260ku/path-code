@@ -66,7 +66,7 @@ function success(pos) {
     
     if (positions.length > 0) {
         var target = positions[nextPositionNum];
-        var distToNextPosition = getDistance(currentPos, target)
+        var distToNextPosition = getDistance(currentPosition, target)
         if (distToNextPosition < threshold) {
             console.log("reach");
             sound.play();
@@ -144,6 +144,7 @@ $('.reach-button').on('click', function() {
 
 AFRAME.registerComponent('gps-entity-place-added', {
 	init: function(){
-	    alert('add');
+	    // alert('add');
+        console.log("add");
 	}
 });
