@@ -122,7 +122,7 @@ $('.locate-button').on('click', function() {
     L.marker([currentPosition[0], currentPosition[1]], {icon: L.spriteIcon('green')}).addTo(map);
 })
 $('.start-button').on('click', function() {
-    if ($('.threshold-form').val() == '') {
+    if ($('.threshold-form').val() != '') {
         threshold = $('.threshold-form').val();
     }
     
