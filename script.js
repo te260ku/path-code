@@ -14,8 +14,6 @@ var modelInfo = {
     };
 var start = false;
 var mapArea = $('#map-area');
-var cameraArea = $('#camera-area');
-cameraArea.hide();
 
 var map = L.map('map', {
     center: [35.66572, 139.73100],
@@ -114,12 +112,10 @@ $('.start-button').on('click', function() {
     start = true;
 })
 $('.map-button').on('click', function() {
-    cameraArea.hide();
     mapArea.show();
 })
 $('.camera-button').on('click', function() {
     mapArea.hide();
-    cameraArea.show();
 })
 $('.reach-button').on('click', function() {
     createModel(36.34901209450942, 138.99239407459294);
