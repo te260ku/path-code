@@ -120,13 +120,18 @@ $('.camera-button').on('click', function() {
 })
 $('.reach-button').on('click', function() {
     console.log("push");
-    createModel(36.34933127648259, 138.99257243887092);
+    // createModel(36.34933127648259, 138.99257243887092);
+    createModel(36.34901209450942, 138.99239407459294);
 })
+
+
+// center: createModel(36.34933127648259, 138.99257243887092);
+// outside: createModel(36.34901209450942, 138.99239407459294);
 
 
 
 AFRAME.registerComponent('gps-entity-place-added', {
 	init: function(){
-	
+	alert('add');
 	}
 });
