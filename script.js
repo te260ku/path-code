@@ -8,7 +8,7 @@ var options = {
     maximumAge: 2000,
 };
 var modelInfo = {
-        url: './assets/scene.gltf',
+        url: './assets/models/scene.gltf',
         scale: '2 2 2',
         rotation: '0 180 0'
     };
@@ -22,6 +22,11 @@ var map = L.map('map', {
     zoom: 17,
     zoomControl: true,
 });
+
+var sound = new Audio();
+sound.preload = "auto";
+sound.src = "./assets/audio/sound.mp3";
+sound.load();
 
 var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -64,6 +69,7 @@ function success(pos) {
         var distToNextPosition = getDistance(currentPos, target)
         if (distToNextPosition < threshold) {
             console.log("reach");
+            sound.play();
             L.marker([target[0], target[1]], {icon: L.spriteIcon('red')}).addTo(map);
             if (nextPositionNum < positions.length-1) {
                 nextPositionNum ++;
@@ -71,9 +77,7 @@ function success(pos) {
                 navigator.geolocation.clearWatch(id);
                 // 3Dモデルを作成する
                 createModel(target[0], target[1]);
-               
-
-                alert("finish");
+                alert("MESSAGE");
             }
         }
     }
@@ -116,6 +120,7 @@ $('.map-button').on('click', function() {
 $('.camera-button').on('click', function() {
     mapArea.hide();
     cameraArea.show();
-
+})
+$('.reach-button').on('click', function() {
     createModel(36.34901209450942, 138.99239407459294);
 })
