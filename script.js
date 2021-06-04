@@ -89,6 +89,7 @@ function createModel(lat, lng) {
     model.attr('gltf-model', modelInfo.url);
     model.attr('look-at', "[gps-camera]");
     model.attr('gps-entity-place', `latitude: ${lat}; longitude: ${lng}; `);
+    model.attr('gps-entity-place-added', "");
     scene.append(model);
 }
 
@@ -118,5 +119,14 @@ $('.camera-button').on('click', function() {
     mapArea.hide();
 })
 $('.reach-button').on('click', function() {
-    createModel(36.34901209450942, 138.99239407459294);
+    console.log("push");
+    createModel(36.34933127648259, 138.99257243887092);
 })
+
+
+
+AFRAME.registerComponent('gps-entity-place-added', {
+	init: function(){
+	
+	}
+});
