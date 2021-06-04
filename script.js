@@ -55,7 +55,6 @@ function success(pos) {
     var lat = pos.coords.latitude;
     var lng = pos.coords.longitude;
     var currentPos = [lat, lng];
-    map.setView([lat, lng], 17);
     // L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
 
     if (!start) {
@@ -79,6 +78,13 @@ function success(pos) {
             }
         }
     }
+}
+
+function setCurrentPosition(pos) {
+    console.log("get");
+    var lat = pos.coords.latitude;
+    var lng = pos.coords.longitude;
+    map.setView([lat, lng], 17);
 }
 
 function createModel(lat, lng) {
@@ -107,7 +113,8 @@ if (navigator.geolocation) {
 }
 
 $('.locate-button').on('click', function() {
-    navigator.geolocation.getCurrentPosition(success, error, options);
+    navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
+    
 })
 $('.start-button').on('click', function() {
     start = true;
@@ -120,18 +127,14 @@ $('.camera-button').on('click', function() {
 })
 $('.reach-button').on('click', function() {
     console.log("push");
-    // createModel(36.34933127648259, 138.99257243887092);
+    // center: createModel(36.34933127648259, 138.99257243887092);
+    // outside: createModel(36.34901209450942, 138.99239407459294);
     createModel(36.34901209450942, 138.99239407459294);
 })
 
 
-// center: createModel(36.34933127648259, 138.99257243887092);
-// outside: createModel(36.34901209450942, 138.99239407459294);
-
-
-
 AFRAME.registerComponent('gps-entity-place-added', {
 	init: function(){
-	alert('add');
+	    alert('add');
 	}
 });
