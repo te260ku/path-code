@@ -1,6 +1,6 @@
 var positions = [];
 var nextPositionNum = 0;
-const threshold = 1;
+var threshold = 0.2;
 var id;
 var options = {
     enableHighAccuracy: true,
@@ -14,6 +14,7 @@ var modelInfo = {
     };
 var start = false;
 var mapArea = $('#map-area');
+var currentMarker;
 
 var map = L.map('map', {
     center: [35.66572, 139.73100],
@@ -85,6 +86,7 @@ function setCurrentPosition(pos) {
     var lat = pos.coords.latitude;
     var lng = pos.coords.longitude;
     map.setView([lat, lng], 17);
+    L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
 }
 
 function createModel(lat, lng) {
@@ -117,6 +119,7 @@ $('.locate-button').on('click', function() {
     
 })
 $('.start-button').on('click', function() {
+    threshold = $('.threshold-form').val();
     start = true;
 })
 $('.map-button').on('click', function() {
