@@ -66,7 +66,7 @@ function success(pos) {
     
     if (positions.length > 0) {
         var target = positions[nextPositionNum];
-        var distToNextPosition = getDistance(currentPosition, target)
+        var distToNextPosition = getDistance(currentPos, target)
         if (distToNextPosition < threshold) {
             console.log("reach");
             sound.play();
