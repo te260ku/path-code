@@ -1,6 +1,6 @@
 var positions = [];
 var nextPositionNum = 0;
-var threshold = 1;
+var threshold = 5;
 var id;
 var options = {
     enableHighAccuracy: true,
