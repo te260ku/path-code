@@ -58,20 +58,30 @@ app.use(function(req, res, next){
 ///////////////////////////////////////////////////////////
 //HTTPのPOSTメソッドで、パス=/ に通信を受け付けたときの処理を定義
 ///////////////////////////////////////////////////////////
-var mydata = {};
+var mydata = [];
 app.post('/',function(req, res){
     var obj = {};
 
     nickname = JSON.stringify( req.body.nickname );
-    activity = JSON.stringify( req.body.activity );
-    //console.log('Request nickname=' + nickname + ', activity=' + activity);
+    activities = JSON.parse( req.body.activities );
+    positions = JSON.parse( req.body.positions );
+    message = JSON.stringify( req.body.message );
 
-    //オブジェクトmydataの中に、送られてきたnicknameとactivityのペアを格納
-    mydata[nickname] = activity;
-    console.log('Request nickname=' + nickname + ', activity=' + mydata[nickname]);
+    
+    for (i=0; i<positions.length; i++) {
+      positions[i] = JSON.parse(positions[i]);
+    }
+    
+    
+    var data = {"nickname": nickname, "pathInfo" :{"positions": positions, "activities": activities}, "message": message };
+    
+    // mydata.push(data);
 
-    //現在のmydata全体を返答メッセージとしてクライアントに送信
-    res.send(mydata);
+    console.log(data["pathInfo"]["positions"]);
+    console.log(data["pathInfo"]["activities"]);
+
+
+    // res.send(mydata);
 });
 
 

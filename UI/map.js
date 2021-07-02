@@ -227,9 +227,70 @@ $('.line-button').on('click', function() {
     activitySelector.removeAttr('disabled');
     setCurrentModeText(currentMode);
 })
+
+
+var currentPathData;
 $('.submit-button').on('click', function () {
-    var message = $('.submit-button').val();
+    var nickname = $('.nickname-form').val();
+    var message = $('.message-form').val();
+
+    // activity
+    var a = [];
+    for (i=0; i<lines.length; i++) {
+        a.push(lines[i].activity)
+    }
+    a = JSON.stringify(a);
+
+    // position
+    var p = [];
+    for (i=0; i<positions.length; i++) {
+        p.push(JSON.stringify(positions[i]));
+    }
+    p = JSON.stringify(p);
+
+    
+    currentPathData = {
+        "nickname": nickname, 
+        "pathInfo": {'positions': positions, 'activities': a}, 
+        "message": message
+    }
+    console.log(currentPathData);
+
+
+    var sendData = {
+        "nickname": nickname, 
+        "positions": p, 
+        "activities": a, 
+        "message": message
+    }
+    
+    sendPathData(sendData);
 });
+
+function sendPathData(data){
+
+    $.ajax({
+        async: true,
+        url: 'https://usa2021.jn.sfc.keio.ac.jp:1081',
+        type: 'post',
+        cache: false,
+        data: data,
+        dataType: 'json', 
+        traditional: true,
+
+    }).done(function(res, status, jqXHR) {
+        console.log("send");
+        // $('#everyone_status').text("");
+        // Object.keys(res).forEach(function (key) {
+        //     $('#everyone_status').append(key + "は" + res[key] + "な状態<br/>");
+        // });
+
+    }).fail(function(xhr, status, error){
+	    console.log(status);
+	    // $('#everyone_status').text( status );
+    });
+
+}
 
 function setCurrentModeText(mode) {
     var keys = Object.keys(modes);

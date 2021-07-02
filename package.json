@@ -1,0 +1,25 @@
+{
+  "name": "path-code",
+  "version": "1.0.0",
+  "description": "## credit - \"Mail Icon\" (https://skfb.ly/6WGWt) by AnshiNoWara",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/te260ku/path-code.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/te260ku/path-code/issues"
+  },
+  "homepage": "https://github.com/te260ku/path-code#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
