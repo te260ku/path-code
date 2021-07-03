@@ -267,6 +267,8 @@ $('.submit-button').on('click', function () {
     sendPathData(sendData);
 });
 
+
+
 function sendPathData(data){
 
     $.ajax({
@@ -287,6 +289,30 @@ function sendPathData(data){
 
     }).fail(function(xhr, status, error){
 	    console.log(status);
+	    $('#everyone_status').text( status );
+    });
+
+}
+
+var respond;
+function sendFetchRequest(num){
+    $.ajax({
+        async: true,
+        url: 'https://usa2021.jn.sfc.keio.ac.jp:1081',
+        type: 'get',
+        data: {num: num},
+
+    }).done(function(res, status, jqXHR) {
+        console.log("send");
+        // $('#everyone_status').text("");
+        // Object.keys(res).forEach(function (key) {
+        //     $('#everyone_status').append(key + "は" + res[key] + "な状態<br/>");
+        // });
+        console.log(res);
+        respond = res;
+
+    }).fail(function(xhr, status, error){
+	    console.log(status);
 	    // $('#everyone_status').text( status );
     });
 
@@ -296,3 +322,8 @@ function setCurrentModeText(mode) {
     var keys = Object.keys(modes);
     $('.current-mode').text('mode: ' + keys[mode] + ' setting');
 }
+
+$('.fetch-path-button').on('click', function () {
+    var num = $('.fetch-form').val();
+    sendFetchRequest(num);
+})

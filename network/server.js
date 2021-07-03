@@ -58,10 +58,24 @@ app.use(function(req, res, next){
 ///////////////////////////////////////////////////////////
 //HTTPのPOSTメソッドで、パス=/ に通信を受け付けたときの処理を定義
 ///////////////////////////////////////////////////////////
-var mydata = [];
-app.post('/',function(req, res){
-    var obj = {};
+var data = [];
 
+app.get('/',function(req, res){
+  var dataNum = req.query.num;
+  console.log('fetch: ' + dataNum);
+
+  if (data.length > dataNum) {
+    var tmp = data[dataNum];
+    tmp["positions"] = JSON.stringify(tmp["positions"]);
+    tmp["activities"] = JSON.stringify(tmp["activities"]);
+    tmp["nickname"] = JSON.parse(tmp["nickname"]);
+    tmp["message"] = JSON.parse(tmp["message"]);
+    res.send(tmp);
+    console.log(tmp);
+  }
+});
+
+app.post('/',function(req, res){
     nickname = JSON.stringify( req.body.nickname );
     activities = JSON.parse( req.body.activities );
     positions = JSON.parse( req.body.positions );
@@ -73,16 +87,16 @@ app.post('/',function(req, res){
     }
     
     
-    var data = {"nickname": nickname, "pathInfo" :{"positions": positions, "activities": activities}, "message": message };
+    var d = {"nickname": nickname, "pathInfo" :{"positions": positions, "activities": activities}, "message": message };
     
-    // mydata.push(data);
+    data.push(d);
 
-    console.log(data["pathInfo"]["positions"]);
-    console.log(data["pathInfo"]["activities"]);
-
+    console.log(d)
 
     // res.send(mydata);
 });
+
+
 
 
 ///////////////////////////////////////////////////////////
@@ -90,4 +104,4 @@ app.post('/',function(req, res){
 ///////////////////////////////////////////////////////////
 console.log("Now start listening at the port: " + server_port );
 server.listen(server_port);
-
+      
