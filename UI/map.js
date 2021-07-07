@@ -24,10 +24,10 @@ var map = L.map('map', {
 });
 
 
-var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+var tileLayer_set = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
 });
-tileLayer.addTo(map);
+tileLayer_set.addTo(map);
 
 
 function getDistance(pos1, pos2) {
@@ -117,10 +117,21 @@ $('.start-button').on('click', function() {
 })
 
 
-
+// ------------------------------------------------
 // UI
+var mapView = L.map('view-map', {
+    center: [35.66572, 139.73100],
+    zoom: 17,
+    zoomControl: true,
+});
+var tileLayer_view = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+});
+tileLayer_view.addTo(mapView);
+
+
 var selectedLine;
-const activities = [
+const activityList = [
     {name: "walk", color: "blue" }, 
     {name: "run", color: "green" }, 
 ];
@@ -159,7 +170,7 @@ map.on('click', function(e) {
             
             line.id = len-2;
             line.bindPopup("<h3 class='text-center'>" + line.id + "</h3>");
-            line.activity = activities[0].name;
+            line.activity = activityList[0].name;
             
             line.on('click', function(event) {
                 if (currentMode != modes.activity) {
@@ -189,9 +200,9 @@ $('.set-activity-button').on('click', function() {
     if (selectedLine == null) {
         return;
     }
-    selectedLine.activity = activities[activitySelector.prop("selectedIndex")].name;
+    selectedLine.activity = activityList[activitySelector.prop("selectedIndex")].name;
     selectedLine.setStyle({
-        color: activities[activitySelector.prop("selectedIndex")].color
+        color: activityList[activitySelector.prop("selectedIndex")].color
     });
     lines[selectedLine.id] = selectedLine;
 
@@ -327,5 +338,11 @@ var viewMapModal = new bootstrap.Modal(document.getElementById('view-map-modal')
 $('#set-map-modal').on('show.bs.modal', function(){
     setTimeout(function() {
       map.invalidateSize();
+    }, 10);
+});
+
+$('#view-map-modal').on('show.bs.modal', function(){
+    setTimeout(function() {
+      mapView.invalidateSize();
     }, 10);
 });
