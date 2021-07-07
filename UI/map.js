@@ -30,70 +30,6 @@ attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributo
 tileLayer.addTo(map);
 
 
-
-var selectedLine;
-const activities = [
-    {name: "walk", color: "blue" }, 
-    {name: "run", color: "green" }, 
-];
-var activityLines = [];
-var markers = [];
-var lines = [];
-var modes = {
-    path : 0, 
-    activity : 1
-};
-var currentMode = modes.path;
-map.on('click', function(e) {
-    lat = e.latlng.lat;
-    lng = e.latlng.lng;
-
-    if (currentMode == modes.path) {
-        console.log("lat: " + lat + ", lng: " + lng);
-        var p = [lat, lng];
-        positions.push(p);
-        var m = L.marker([lat, lng]).addTo(map);
-        markers.push(m);
-
-
-
-        if (markers.length >= 2) {
-            var len = markers.length;
-            var line = L.polyline([
-                markers[len-1].getLatLng(), 
-                markers[len-2].getLatLng(), 
-            ],{
-                "color": "#666666",
-                "weight": 5,
-                "opacity": 1, 
-            }).addTo(map);
-            line.id = len-2;
-            line.activity = activities[0].name;
-            
-            line.on('click', function(event) {
-                if (currentMode != modes.activity) {
-                    return;
-                }
-                selectedLine = event.target;
-                selectLine(selectedLine);
-            });
-    
-            lines.push(line);
-            console.log("draw line");
-    } 
-
-    
-    }
-    
-function selectLine() {
-    activitySelector.val(selectedLine.activity);
-    $('.selected-line').text('selected-line: ' + selectedLine.id);
-    console.log("select line");
-}
-    
-    
-});
-
 function getDistance(pos1, pos2) {
     var [lat1, lng1] = pos1;
     var [lat2, lng2] = pos2;
@@ -169,8 +105,85 @@ if (navigator.geolocation) {
     alert( errorMessage );
 }
 
-var activitySelector = $('.activity-selector');
+
+
+$('.locate-button').on('click', function() {
+    navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
+    map.setView([currentPosition[0], currentPosition[1]], 17);
+    L.marker([currentPosition[0], currentPosition[1]], {icon: L.spriteIcon('green')}).addTo(map);
+})
+$('.start-button').on('click', function() {
+    start = true;
+})
+
+
+
+// UI
+var selectedLine;
+const activities = [
+    {name: "walk", color: "blue" }, 
+    {name: "run", color: "green" }, 
+];
+var activityLines = [];
+var markers = [];
+var lines = [];
+var modes = {
+    path : 0, 
+    activity : 1
+};
+var currentMode = modes.path;
+
+// マーカー設置
+map.on('click', function(e) {
+    lat = e.latlng.lat;
+    lng = e.latlng.lng;
+
+    if (currentMode == modes.path) {
+        console.log("lat: " + lat + ", lng: " + lng);
+        var p = [lat, lng];
+        positions.push(p);
+        var m = L.marker([lat, lng]).addTo(map);
+        markers.push(m);
+
+        if (markers.length >= 2) {
+            var len = markers.length;
+            var line = L.polyline([
+                markers[len-1].getLatLng(), 
+                markers[len-2].getLatLng(), 
+            ],{
+                "color": "#666666",
+                "weight": 5,
+                "opacity": 1, 
+                
+            }).addTo(map);
+            
+            line.id = len-2;
+            line.bindPopup("<h3 class='text-center'>" + line.id + "</h3>");
+            line.activity = activities[0].name;
+            
+            line.on('click', function(event) {
+                if (currentMode != modes.activity) {
+                    return;
+                }
+                selectedLine = event.target;
+                selectLine(selectedLine);
+            });
+    
+            lines.push(line);
+            console.log("draw line");
+    } 
+    }
+});
+
+function selectLine(line) {
+    activitySelector.val(line.activity);
+    console.log("select line");
+}
+
 setCurrentModeText(currentMode);
+
+var activitySelector = $('.activity-selector');
+
 
 $('.set-activity-button').on('click', function() {
     if (selectedLine == null) {
@@ -192,30 +205,19 @@ $('.set-activity-button').on('click', function() {
     
 })
 
-$('.locate-button').on('click', function() {
-    navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
-    map.setView([currentPosition[0], currentPosition[1]], 17);
-    L.marker([currentPosition[0], currentPosition[1]], {icon: L.spriteIcon('green')}).addTo(map);
+// ビュー切り替え
+$('.set-map-button').on('click', function() {
+    setMapModal.show();
 })
-$('.start-button').on('click', function() {
-    if ($('.threshold-form').val() != '') {
-        threshold = $('.threshold-form').val();
-    }
-    
-    start = true;
-})
-$('.map-button').on('click', function() {
-    mapArea.show();
+$('.view-map-button').on('click', function() {
+    viewMapModal.show();
 })
 $('.camera-button').on('click', function() {
-    mapArea.hide();
+    // mapArea.hide();
 })
-$('.reach-button').on('click', function() {
-    console.log("push");
-    // center: createModel(36.34933127648259, 138.99257243887092);
-    // outside: createModel(36.34901209450942, 138.99239407459294);
-    createModel(36.34901209450942, 138.99239407459294);
-})
+
+
+// モード切り替え
 $('.marker-button').on('click', function() {
     currentMode = modes.path;
     activitySelector.attr('disabled','disabled');
@@ -267,10 +269,10 @@ $('.submit-button').on('click', function () {
     sendPathData(sendData);
 });
 
+var currentPathData;
 
 
 function sendPathData(data){
-
     $.ajax({
         async: true,
         url: 'https://usa2021.jn.sfc.keio.ac.jp:1081',
@@ -281,11 +283,7 @@ function sendPathData(data){
         traditional: true,
 
     }).done(function(res, status, jqXHR) {
-        console.log("send");
-        // $('#everyone_status').text("");
-        // Object.keys(res).forEach(function (key) {
-        //     $('#everyone_status').append(key + "は" + res[key] + "な状態<br/>");
-        // });
+        console.log("send path");
 
     }).fail(function(xhr, status, error){
 	    console.log(status);
@@ -294,7 +292,6 @@ function sendPathData(data){
 
 }
 
-var respond;
 function sendFetchRequest(num){
     $.ajax({
         async: true,
@@ -303,27 +300,32 @@ function sendFetchRequest(num){
         data: {num: num},
 
     }).done(function(res, status, jqXHR) {
-        console.log("send");
-        // $('#everyone_status').text("");
-        // Object.keys(res).forEach(function (key) {
-        //     $('#everyone_status').append(key + "は" + res[key] + "な状態<br/>");
-        // });
+        console.log("send request");
         console.log(res);
-        respond = res;
+        currentPathData = res;
 
     }).fail(function(xhr, status, error){
 	    console.log(status);
-	    // $('#everyone_status').text( status );
     });
-
 }
 
 function setCurrentModeText(mode) {
     var keys = Object.keys(modes);
-    $('.current-mode').text('mode: ' + keys[mode] + ' setting');
+    $('.current-mode').text(keys[mode] + ' setting');
 }
+
+
 
 $('.fetch-path-button').on('click', function () {
     var num = $('.fetch-form').val();
     sendFetchRequest(num);
 })
+
+
+var setMapModal = new bootstrap.Modal(document.getElementById('set-map-modal'));
+var viewMapModal = new bootstrap.Modal(document.getElementById('view-map-modal'));
+$('#set-map-modal').on('show.bs.modal', function(){
+    setTimeout(function() {
+      map.invalidateSize();
+    }, 10);
+});
