@@ -1,6 +1,6 @@
 var positions = [];
 var nextPositionNum = 0;
-var threshold = 5;
+var threshold = 0.01;
 var id;
 var userPosition;
 var modelInfo = {
@@ -50,7 +50,14 @@ function success(pos) {
     var currentPos = [lat, lng];
 
     // 現在地をマーカーで表示
-    updateUserPositionMarker([lat, lng], mapView)
+    // updateUserPositionMarker([lat, lng], mapView);
+
+    if (userPositionMarkerForView == null) {
+        userPositionMarkerForView = L.marker(currentPos, {icon: L.spriteIcon('green')}).addTo(mapView);
+    } else {
+        userPositionMarkerForView.setLatLng(currentPos);
+    }
+    
     
 
     if (!start) {
@@ -74,10 +81,11 @@ function success(pos) {
         // ----------------------------------
 
         var distToNextPosition = getDistance(currentPos, target)
+        // if (distToNextPosition < threshold && activities[nextPositionNum].done == true) {
         if (distToNextPosition < threshold) {
             console.log("reach");
             sound.play();
-            L.marker([target[0], target[1]], {icon: L.spriteIcon('red')}).addTo(map);
+            L.marker([target[0], target[1]], {icon: L.spriteIcon('red')}).addTo(mapView);
             if (nextPositionNum < positions.length-1) {
                 nextPositionNum ++;
             } else {
@@ -153,10 +161,17 @@ if (navigator.geolocation) {
     alert( errorMessage );
 }
 
+
+var userPositionMarkerForSetting;
+var userPositionMarkerForView;
 $('.locate-button').on('click', function() {
     navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
     map.setView([currentPosition[0], currentPosition[1]], 17);
-    
+    if (userPositionMarkerForSetting == null) {
+        userPositionMarkerForSetting = L.marker(currentPosition, {icon: L.spriteIcon('green')}).addTo(map);
+    } else {
+        userPositionMarkerForSetting.setLatLng(currentPosition);
+    }
 
     
 })
@@ -200,7 +215,12 @@ function startFollowing() {
 
     navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
     mapView.setView([currentPosition[0], currentPosition[1]], 17);
-    updateUserPositionMarker(currentPosition, mapView);
+    
+    if (userPositionMarkerForView == null) {
+        userPositionMarkerForView = L.marker(currentPos, {icon: L.spriteIcon('green')}).addTo(mapView);
+    } else {
+        userPositionMarkerForView.setLatLng(currentPosition);
+    }
 
 
     start = true;

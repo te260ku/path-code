@@ -184,7 +184,7 @@ $('.submit-button').on('click', function () {
         "pathInfo": {'positions': positions, 'activities': JSON.parse(a)}, 
         "message": message
     }
-    console.log(currentPathData);
+    
 
     var sendData = {
         "nickname": nickname, 
@@ -228,12 +228,11 @@ function sendPathData(data) {
         traditional: true,
 
     }).done(function(res, status, jqXHR) {
-        console.log("send path");
+        console.log(currentPathData);
         alert("submited path");
         
     }).fail(function(xhr, status, error){
 	    console.log(status);
-	    $('#everyone_status').text( status );
     });
 
 }
