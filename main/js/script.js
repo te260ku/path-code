@@ -30,6 +30,10 @@ sound.preload = "auto";
 sound.src = "../../assets/audio/sound.mp3";
 sound.load();
 
+function play() {
+    sound.play();
+}
+
 
 function getDistance(pos1, pos2) {
     var [lat1, lng1] = pos1;
