@@ -12,6 +12,11 @@ var start = false;
 var currentMarker;
 var currentPosition = [36.34901209450942, 138.99239407459294];
 var currentPathData;
+var options = {
+    enableHighAccuracy: true,
+    timeout: 8000,
+    maximumAge: 2000,
+};
 
 
 // activity
@@ -45,11 +50,7 @@ function success(pos) {
     var currentPos = [lat, lng];
 
     // 現在地をマーカーで表示
-    if (userPosition == null) {
-        userPosition = L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(map);
-    } else {
-        userPosition.setLatLng([lat, lng]);
-    }
+    updateUserPositionMarker([lat, lng], mapView)
     
 
     if (!start) {
@@ -75,7 +76,7 @@ function success(pos) {
         var distToNextPosition = getDistance(currentPos, target)
         if (distToNextPosition < threshold) {
             console.log("reach");
-            // sound.play();
+            sound.play();
             L.marker([target[0], target[1]], {icon: L.spriteIcon('red')}).addTo(map);
             if (nextPositionNum < positions.length-1) {
                 nextPositionNum ++;
@@ -133,8 +134,19 @@ function error(err) {
 }
 
 
+function updateUserPositionMarker(pos, m) {
+    var lat = pos[0];
+    var lng = pos[1];
+    if (userPosition == null) {
+        userPosition = L.marker([lat, lng], {icon: L.spriteIcon('green')}).addTo(m);
+    } else {
+        userPosition.setLatLng([lat, lng]);
+    }
+}
+
+
 if (navigator.geolocation) {
-    // id = navigator.geolocation.watchPosition(success, error, options);
+    id = navigator.geolocation.watchPosition(success, error, options);
 } else {
     // 対応していない場合
     var errorMessage = "error";
@@ -144,7 +156,9 @@ if (navigator.geolocation) {
 $('.locate-button').on('click', function() {
     navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
     map.setView([currentPosition[0], currentPosition[1]], 17);
-    L.marker([currentPosition[0], currentPosition[1]], {icon: L.spriteIcon('green')}).addTo(map);
+    
+
+    
 })
 
 $('.start-button').on('click', function() {
@@ -183,8 +197,12 @@ function startFollowing() {
             }).addTo(mapView);
         }
     }
-    
-    
+
+    navigator.geolocation.getCurrentPosition(setCurrentPosition, error, options);
+    mapView.setView([currentPosition[0], currentPosition[1]], 17);
+    updateUserPositionMarker(currentPosition, mapView);
+
+
     start = true;
 }
 

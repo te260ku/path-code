@@ -3,7 +3,7 @@ html, body {
     padding: 0;
     height: 100%;
 }
-#map {
+#map, #view-map {
     width: auto;
     height: 300px;
 }

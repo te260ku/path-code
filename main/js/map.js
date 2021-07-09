@@ -1,8 +1,3 @@
-var options = {
-    enableHighAccuracy: true,
-    timeout: 8000,
-    maximumAge: 2000,
-};
 var mapArea = $('#map-area');
 var selectedLine;
 const activityList = [
@@ -199,7 +194,6 @@ $('.submit-button').on('click', function () {
     }
 
     showSelectedPath(currentPathData);
-    
     sendPathData(sendData);
 });
 
@@ -217,7 +211,6 @@ function showSelectedPath(data) {
     var m = data["pathInfo"]["positions"];
     var l = data["pathInfo"]["activities"];
     for (i=0; i<m.length-1; i++) {
-
         var row = `<tr><td>` + i + `</td><td>` + l[i] + `</td><td>` + (i+1) + `</td></tr>`;
         pathList.append(row);
     }
@@ -236,6 +229,7 @@ function sendPathData(data) {
 
     }).done(function(res, status, jqXHR) {
         console.log("send path");
+        alert("submited path");
         
     }).fail(function(xhr, status, error){
 	    console.log(status);
@@ -255,6 +249,8 @@ function sendFetchRequest(num){
         console.log("send request");
         console.log(res);
         currentPathData = res;
+        showSelectedPath(currentPathData);
+        alert("retrieved path");
 
     }).fail(function(xhr, status, error){
 	    console.log(status);

@@ -17,17 +17,7 @@ var mapArea = $('#map-area');
 var currentMarker;
 var currentPosition = [36.34901209450942, 138.99239407459294]
 
-var map = L.map('map', {
-    center: [35.66572, 139.73100],
-    zoom: 17,
-    zoomControl: true,
-});
 
-
-var tileLayer_set = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-});
-tileLayer_set.addTo(map);
 
 
 function getDistance(pos1, pos2) {
@@ -119,6 +109,16 @@ $('.start-button').on('click', function() {
 
 // ------------------------------------------------
 // UI
+var map = L.map('map', {
+    center: [35.66572, 139.73100],
+    zoom: 17,
+    zoomControl: true,
+});
+var tileLayer_set = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+});
+tileLayer_set.addTo(map);
+
 var mapView = L.map('view-map', {
     center: [35.66572, 139.73100],
     zoom: 17,
@@ -181,6 +181,9 @@ map.on('click', function(e) {
             });
     
             lines.push(line);
+
+            createPathTables();
+            
             console.log("draw line");
     } 
     }
@@ -206,15 +209,20 @@ $('.set-activity-button').on('click', function() {
     });
     lines[selectedLine.id] = selectedLine;
 
+    
+    
+    createPathTables();
+    
+})
+
+function createPathTables() {
     var pathList = $('.path-list');
     pathList.empty();
-    
     for (i=0; i<markers.length-1; i++) {
         var row = `<tr><td>` + i + `</td><td>` + lines[i].activity + `</td><td>` + (i+1) + `</td></tr>`;
         $('.path-list').append(row);
     }
-    
-})
+}
 
 // ビュー切り替え
 $('.set-map-button').on('click', function() {
@@ -276,6 +284,8 @@ $('.submit-button').on('click', function () {
         "activities": a, 
         "message": message
     }
+
+    $('.creator-nickname').text("created by: " + nickname);
     
     sendPathData(sendData);
 });
@@ -283,7 +293,7 @@ $('.submit-button').on('click', function () {
 var currentPathData;
 
 
-function sendPathData(data){
+function sendPathData(data) {
     $.ajax({
         async: true,
         url: 'https://usa2021.jn.sfc.keio.ac.jp:1081',
@@ -295,6 +305,7 @@ function sendPathData(data){
 
     }).done(function(res, status, jqXHR) {
         console.log("send path");
+        
 
     }).fail(function(xhr, status, error){
 	    console.log(status);

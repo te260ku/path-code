@@ -1,6 +1,6 @@
 var positions = [];
 var nextPositionNum = 0;
-var threshold = 5;
+var threshold = 0.01;
 var id;
 var options = {
     enableHighAccuracy: true,
@@ -121,13 +121,11 @@ $('.locate-button').on('click', function() {
     map.setView([currentPosition[0], currentPosition[1]], 17);
     L.marker([currentPosition[0], currentPosition[1]], {icon: L.spriteIcon('green')}).addTo(map);
 })
-$('.start-button').on('click', function() {
-    if ($('.threshold-form').val() != '') {
-        threshold = $('.threshold-form').val();
-    }
-    
+$('.start-button').on('click', function() {    
     start = true;
 })
+
+
 $('.map-button').on('click', function() {
     mapArea.show();
 })
