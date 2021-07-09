@@ -27,7 +27,7 @@ var nextActivity;
 
 var sound = new Audio();
 sound.preload = "auto";
-sound.src = "../../assets/audio/sound.mp3";
+sound.src = "../assets/audio/sound.mp3";
 sound.load();
 
 function play() {
