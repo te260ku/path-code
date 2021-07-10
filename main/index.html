@@ -95,8 +95,11 @@
                 
                   <select class="form-select activity-selector" aria-label="Default select example" disabled>
                     <!-- <option >Select Activity</option> -->
-                    <option selected value="walk">Walk</option>
+                    <option selected value="any">Any</option>
+                    <option value="walk">Walk</option>
                     <option value="run">Run</option>
+                    <option value="run">Camera</option>
+                    
                 </select>  
                 <button class="set-activity-button btn btn-primary px-4">Set</button>
               </div>
@@ -204,7 +207,59 @@
       </div>
     </div>
 
-    <button onclick="play()"></button>
+
+
+
+    <button onclick="requestMotionPermission();">Get permission and start sensing</button>
+    <button onclick="stopDeviceMotion();">Stop</button>
+
+    <h2>(3) Classification result</h2>
+    <p> Result: <span id="current_result" style="color:red;font-weight: 900;">null</span> </p> 
+    
+    <h2>(2) Features for this time window</h2>
+    <p> min x: <span id="xmin">0</span> </p>
+    <p> max x: <span id="xmax">0</span> </p>
+    <p> ave x: <span id="xave">0</span> </p>
+
+    <p> min y: <span id="ymin">0</span> </p>
+    <p> max y: <span id="ymax">0</span> </p>
+    <p> ave y: <span id="yave">0</span> </p>
+
+    <p> min z: <span id="zmin">0</span> </p>
+    <p> max z: <span id="zmax">0</span> </p>
+    <p> ave z: <span id="zave">0</span> </p>
+
+    <p> std x: <span id="xstd">0</span> </p>
+    <p> std y: <span id="ystd">0</span> </p>
+    <p> std z: <span id="zstd">0</span> </p>
+
+    <p> cor x-y: <span id="xycor">0</span> </p>
+    <p> cor x-z: <span id="xzcor">0</span> </p>
+    <p> cor y-z: <span id="yzcor">0</span> </p>
+
+
+    <!-- <a-scene
+        vr-mode-ui="enabled: false"
+        embedded
+        arjs="sourceType: webcam; debugUIEnabled: false;"
+      >
+
+      <a-assets>
+        <a-asset-item id="mail" src="../assets/models/scene.gltf"></a-asset-item>
+      </a-assets>
+      
+      <a-entity 
+      scale="0 0 0" 
+      rotation="0 180 0" 
+      gltf-model="../assets/models/scene.gltf" 
+      gps-entity-place="latitude: 36.34933127648259; longitude: 138.99257243887092; "
+      gps-entity-place-added 
+      clickhandler>
+      </a-entity>
+      
+
+        <a-camera gps-camera rotation-reader> </a-camera>
+      </a-scene> -->
 
 
 

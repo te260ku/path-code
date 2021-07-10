@@ -4,7 +4,7 @@ var threshold = 0.01;
 var id;
 var userPosition;
 var modelInfo = {
-        url: './assets/models/scene.gltf',
+        url: '../assets/models/scene.gltf',
         scale: '2 2 2',
         rotation: '0 180 0'
     };
@@ -76,9 +76,13 @@ function success(pos) {
         // if (activities.length > 0) {
         //     // 次が最後の目標地点ではない場合
         //     if (nextPositionNum < positions.length) {
-        //         if (currentActivity == nextActivity) {
+        //         if (nextActivity == "any") {
         //             activities[nextPositionNum].done = true;
-        //             alert("done activity");
+        //         } else {
+        //             if (currentActivity == nextActivity) {
+        //                 activities[nextPositionNum].done = true;
+        //                 alert("done activity");
+        //             }
         //         }
         //     }
         // }
@@ -245,4 +249,10 @@ function startFollowing() {
 // 	}
 // });
 
+// AFRAME.registerComponent('clickhandler', {
+//     init: function() {
+//         this.el.addEventListener('click', () => {
+//             alert("Message")
+//         });
+// }});
 

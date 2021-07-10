@@ -1,5 +1,5 @@
-soundON = false;
-var sound = new Audio();
+soundON = true;
+var soundActivity = new Audio();
 
 var currentActivity = "";
 
@@ -37,8 +37,8 @@ function requestMotionPermission(){
 	      window.addEventListener("devicemotion", handleAcceleration, false);
 
         if (soundON) {
-          sound.src = './audio/stand.mp3';
-          sound.play();
+          soundActivity.src = '../assets/audio/stand.mp3';
+          soundActivity.play();
         }
         
 	  } else {
@@ -66,14 +66,6 @@ function stopDeviceMotion(){
 //  - この関数は(機種によりますが) 秒速10〜100回というような高頻度で呼ばれます
 ////////////////////////////////////////////////////////////////////
 function handleAcceleration(ev){
-
-    //alert("" + event.acceleration.x + " " + event.acceleration.y + " " + event.acceleration.z);
-    $('#accel-x').text( ev.accelerationIncludingGravity.x );
-    xdata.push(ev.accelerationIncludingGravity.x);
-    $('#accel-y').text( ev.accelerationIncludingGravity.y );
-    ydata.push(ev.accelerationIncludingGravity.y);
-    $('#accel-z').text( ev.accelerationIncludingGravity.z );
-    zdata.push(ev.accelerationIncludingGravity.z);
 
 
     num_data++;
@@ -155,8 +147,8 @@ function classify(){
     }
 
     if (soundON) {
-      sound.src = './audio/' + res + '.mp3';
-      sound.play();
+      soundActivity.src = '../assets/audio/' + res + '.mp3';
+      soundActivity.play();
     }
 
     return res;

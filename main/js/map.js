@@ -1,8 +1,10 @@
 var mapArea = $('#map-area');
 var selectedLine;
 const activityList = [
+    {name: "any", color: "gray" }, 
     {name: "walk", color: "blue" }, 
     {name: "run", color: "green" }, 
+    {name: "camera", color: "yellow" }, 
 ];
 var activityLines = [];
 var markers = [];
@@ -105,7 +107,7 @@ map.on('click', function(e) {
                 markers[len-1].getLatLng(), 
                 markers[len-2].getLatLng(), 
             ],{
-                "color": "#666666",
+                "color": activityList[0].color,
                 "weight": 5,
                 "opacity": 1, 
                 
@@ -219,13 +221,13 @@ function showSelectedPath(data) {
 
 function sendPathData(data) {
     $.ajax({
-        async: true,
+        async: false,
         url: 'https://usa2021.jn.sfc.keio.ac.jp:1081',
         type: 'post',
         cache: false,
         data: data,
         dataType: 'json', 
-        traditional: true,
+        // traditional: true,
 
     }).done(function(res, status, jqXHR) {
         console.log(currentPathData);
